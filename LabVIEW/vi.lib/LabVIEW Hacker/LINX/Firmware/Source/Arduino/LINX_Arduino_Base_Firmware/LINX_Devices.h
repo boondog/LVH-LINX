@@ -260,7 +260,7 @@
   //Device ID
   #define DEVICE_FAMILY 2
   #define DEVICE_ID 2
-  #define DEVICE_NAME_LENGTH 11
+  #define DEVICE_NAME_LENGTH 16
   unsigned char deviceName[] = {'A', 'r', 'd', 'u', 'i', 'n', 'o',' ','L','e','o','n','a','r','d','o'};
   
   //Peripheral Enable
@@ -329,6 +329,47 @@
   //#define LINX_UART_ENABLED 1
   #define LINX_NVS_ENABLED 1
 #endif //ARDUINO_NANO
+
+/*---------------------------------------- DUE --------------------------------------*/
+#ifdef ARDUINO_DUE
+  //Device ID
+  #define DEVICE_FAMILY 2
+  #define DEVICE_ID 3
+  #define DEVICE_NAME_LENGTH 12
+  unsigned char deviceName[] = {'A', 'r', 'd', 'u', 'i', 'n', 'o',' ','D','u','e'};
+  //Peripheral
+  #define LINX_DIGITAL_ENABLED 1
+  #define LINX_I2C_ENABLED 1
+  #define LINX_ANALOG_INPUT_ENABLED 1
+  #define LINX_ANALOG_OUTPUT_ENABLED 1
+  #define LINX_PWM_ENABLED 1
+  #define LINX_SPI_ENABLED 1
+  #define LINX_UART_ENABLED 1
+  #define LINX_NVS_ENABLED 1
+  
+  //Describe Peripherals  
+  #define NUMDIOCHANS 54
+  unsigned char DIOChans[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53};
+  #define NUMAICHANS 12
+  unsigned char AIChans[] = {0 ,1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11};
+  #define AI_RESOLUTION 12
+  #define AI_REFERENCE 3.3
+  #define NUMAOCHANS 2
+  unsigned char AOChans[] = {0, 1};
+  #define NUMPWMCHANS 11
+  unsigned char PWMChans[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+  #define NUMQECHANS 0
+  unsigned char QEChans[] = {};
+  #define NUMUARTCHANS 4
+  unsigned char UARTChans[] = {16, 17, 18, 19};
+  #define NUMI2CCHANS 2
+  unsigned char I2CChans[] = {20, 21};
+  #define NUMSPICHANS 1
+  unsigned char SPIChans[] = {0};
+  #define NUMCANCHANS 0
+  unsigned char CANChans[] = {};
+#endif //ARDUINO_DUE
+
 
 
 /****************************************************************************************

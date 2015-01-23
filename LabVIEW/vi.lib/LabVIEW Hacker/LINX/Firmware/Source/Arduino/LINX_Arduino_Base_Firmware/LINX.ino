@@ -25,8 +25,10 @@
 #endif //LINX_SPI_ENABLED
 
 #ifdef LINX_NVS_ENABLED
-  #include <EEPROM.h>
+  #include <DueFlashStorage.h>
+  DueFlashStorage dueFlashStorage;
 #endif //LINX_NVS_ENABLED
+
 
 /****************************************************************************************
 **
@@ -216,8 +218,8 @@ void setUserDeviceID(unsigned char* commandPacketBuffer, unsigned char* response
   //Update Value In RAM
   userID = commandPacketBuffer[6] << 8 | commandPacketBuffer[7];
   //Update NVS
-  EEPROM.write(NVS_USERID, commandPacketBuffer[6]);
-  EEPROM.write(NVS_USERID+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_USERID, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_USERID+1, commandPacketBuffer[7]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -246,10 +248,10 @@ void setEthernetIP(unsigned char* commandPacketBuffer, unsigned char* responsePa
   //Update Value In RAM
   ethernetIP = (commandPacketBuffer[6]<<24) | (commandPacketBuffer[7]<<16) | (commandPacketBuffer[8]<<8) | (commandPacketBuffer[9]);
   //Update NVS
-  EEPROM.write(NVS_ETHERNET_IP, commandPacketBuffer[6]);
-  EEPROM.write(NVS_ETHERNET_IP+1, commandPacketBuffer[7]);
-  EEPROM.write(NVS_ETHERNET_IP+2, commandPacketBuffer[8]);
-  EEPROM.write(NVS_ETHERNET_IP+3, commandPacketBuffer[9]);
+  dueFlashStorage.write(NVS_ETHERNET_IP, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_ETHERNET_IP+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_ETHERNET_IP+2, commandPacketBuffer[8]);
+  dueFlashStorage.write(NVS_ETHERNET_IP+3, commandPacketBuffer[9]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -280,8 +282,8 @@ void setEthernetPort(unsigned char* commandPacketBuffer, unsigned char* response
   //Update Value In RAM
   ethernetPort = ((commandPacketBuffer[6]<<8) | (commandPacketBuffer[7]));
   //Update NVS
-  EEPROM.write(NVS_ETHERNET_PORT, commandPacketBuffer[6]);
-  EEPROM.write(NVS_ETHERNET_PORT+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_ETHERNET_PORT, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_ETHERNET_PORT+1, commandPacketBuffer[7]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -310,10 +312,10 @@ void setWifiIP(unsigned char* commandPacketBuffer, unsigned char* responsePacket
   //Update Value In RAM
   wifiIP = (commandPacketBuffer[6]<<24) | (commandPacketBuffer[7]<<16) | (commandPacketBuffer[8]<<8) | (commandPacketBuffer[9]);
   //Update NVS
-  EEPROM.write(NVS_WIFI_IP, commandPacketBuffer[6]);
-  EEPROM.write(NVS_WIFI_IP+1, commandPacketBuffer[7]);
-  EEPROM.write(NVS_WIFI_IP+2, commandPacketBuffer[8]);
-  EEPROM.write(NVS_WIFI_IP+3, commandPacketBuffer[9]);
+  dueFlashStorage.write(NVS_WIFI_IP, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_WIFI_IP+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_WIFI_IP+2, commandPacketBuffer[8]);
+  dueFlashStorage.write(NVS_WIFI_IP+3, commandPacketBuffer[9]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -344,8 +346,8 @@ void setWifiPort(unsigned char* commandPacketBuffer, unsigned char* responsePack
   //Update Value In RAM
   wifiPort = ((commandPacketBuffer[6]<<8) | (commandPacketBuffer[7]));
   //Update NVS
-  EEPROM.write(NVS_WIFI_PORT, commandPacketBuffer[6]);
-  EEPROM.write(NVS_WIFI_PORT+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_WIFI_PORT, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_WIFI_PORT+1, commandPacketBuffer[7]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -375,19 +377,19 @@ void setWifiSSID(unsigned char* commandPacketBuffer, unsigned char* responsePack
   if(commandPacketBuffer[6] > 32)
   {
     wifiSSIDSize = 32;
-    EEPROM.write(NVS_WIFI_SSID_SIZE, 32);
+    dueFlashStorage.write(NVS_WIFI_SSID_SIZE, 32);
   }
   else
   {
     wifiSSIDSize =commandPacketBuffer[6];
-    EEPROM.write(NVS_WIFI_SSID_SIZE, commandPacketBuffer[6]);
+    dueFlashStorage.write(NVS_WIFI_SSID_SIZE, commandPacketBuffer[6]);
   }
     
   //Update SSID Value In RAM And NVS
   for(int i=0; i<wifiSSIDSize; i++)
   {
     wifiSSID[i] = commandPacketBuffer[7+i];
-    EEPROM.write(NVS_WIFI_SSID+i, commandPacketBuffer[7+i]);    
+    dueFlashStorage.write(NVS_WIFI_SSID+i, commandPacketBuffer[7+i]);    
   }
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
@@ -423,7 +425,7 @@ void setWifiSecurity(unsigned char* commandPacketBuffer, unsigned char* response
   //Update Value In RAM
   wifiSecurity = commandPacketBuffer[6];
   //Update NVS
-  EEPROM.write(NVS_WIFI_SECURITY_TYPE, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_WIFI_SECURITY_TYPE, commandPacketBuffer[6]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -452,19 +454,19 @@ void setWifiPw(unsigned char* commandPacketBuffer, unsigned char* responsePacket
   if(commandPacketBuffer[6] > 64)
   {
     wifiPwSize = 64;
-    EEPROM.write(NVS_WIFI_PW_SIZE, 64);
+    dueFlashStorage.write(NVS_WIFI_PW_SIZE, 64);
   }
   else
   {
     wifiPwSize = commandPacketBuffer[6];
-    EEPROM.write(NVS_WIFI_PW_SIZE, commandPacketBuffer[6]);
+    dueFlashStorage.write(NVS_WIFI_PW_SIZE, commandPacketBuffer[6]);
   }  
   
   //Update PW Value In RAM And NVS
   for(int i=0; i<wifiPwSize; i++)
   {
     wifiPw[i] = commandPacketBuffer[7+i];
-    EEPROM.write(NVS_WIFI_PW+i, commandPacketBuffer[i+7]);    
+    dueFlashStorage.write(NVS_WIFI_PW+i, commandPacketBuffer[i+7]);    
   }
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
@@ -483,10 +485,10 @@ void setSerialInterfaceMaxBaud(unsigned char* commandPacketBuffer, unsigned char
   serialInterfaceMaxBaud = (unsigned long)(((unsigned long)commandPacketBuffer[6]<<24) | ((unsigned long)commandPacketBuffer[7]<<16) | ((unsigned long)commandPacketBuffer[8]<<8) | ((unsigned long)commandPacketBuffer[9]));
   
   //Update NVS
-  EEPROM.write(NVS_SERIAL_INTERFACE_MAX_BAUD, commandPacketBuffer[6]);
-  EEPROM.write(NVS_SERIAL_INTERFACE_MAX_BAUD+1, commandPacketBuffer[7]);
-  EEPROM.write(NVS_SERIAL_INTERFACE_MAX_BAUD+2, commandPacketBuffer[8]);
-  EEPROM.write(NVS_SERIAL_INTERFACE_MAX_BAUD+3, commandPacketBuffer[9]);
+  dueFlashStorage.write(NVS_SERIAL_INTERFACE_MAX_BAUD, commandPacketBuffer[6]);
+  dueFlashStorage.write(NVS_SERIAL_INTERFACE_MAX_BAUD+1, commandPacketBuffer[7]);
+  dueFlashStorage.write(NVS_SERIAL_INTERFACE_MAX_BAUD+2, commandPacketBuffer[8]);
+  dueFlashStorage.write(NVS_SERIAL_INTERFACE_MAX_BAUD+3, commandPacketBuffer[9]);
   
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[1] = 0x06;                                    //PACKET SIZE
@@ -1873,18 +1875,18 @@ void linxDigitalWriteSquareWave(unsigned char* commandPacketBuffer, unsigned cha
    #endif
   
   
-  if(freq == 0)
-  {
-    noTone(commandPacketBuffer[6]);
-  }
-  else if(duration == 0)
-  {
-    tone(commandPacketBuffer[6], freq);
-  }
-  else
-  {
-    tone(commandPacketBuffer[6], freq, duration);
-  }
+//  if(freq == 0)
+//  {
+//    noTone(commandPacketBuffer[6]);
+//  }
+//  else if(duration == 0)
+//  {
+//    tone(commandPacketBuffer[6], freq);
+//  }
+//  else
+//  {
+//    tone(commandPacketBuffer[6], freq, duration);
+//  }
   
   
   //Send Status OK Response
@@ -2110,6 +2112,7 @@ void linxGetAIRef(unsigned char* commandPacketBuffer, unsigned char* responsePac
 //--------------------------- linxAnalogRead ------------------------------------------//
 void linxAnalogRead(unsigned char* commandPacketBuffer, unsigned char* responsePacketBuffer)
 {
+  analogReadResolution(AI_RESOLUTION);
   //Prep Response Packet
   responsePacketBuffer[0] = 0xFF;                                    //SoF
   responsePacketBuffer[2] = commandPacketBuffer[2];                  //PACKET NUM (MSB)
@@ -2121,7 +2124,7 @@ void linxAnalogRead(unsigned char* commandPacketBuffer, unsigned char* responseP
   unsigned char currentResponseOffset = 6;
   unsigned char responseBitsRemaining = 8; 
   unsigned char dataBitsRemaining = AI_RESOLUTION;
-  
+ 
   responsePacketBuffer[currentResponseOffset] = 0x00;    //Clear Next Response Byte   
   
   //Loop Over All AI Pins In Command Packet
@@ -2236,7 +2239,7 @@ void linxSPIOpenMaster(unsigned char* commandPacketBuffer, unsigned char* respon
 //--------------------------- linxSPISetBitOrder --------------------------------------//
 void linxSPISetBitOrder(unsigned char* commandPacketBuffer, unsigned char* responsePacketBuffer)
 {
-  SPI.setBitOrder(commandPacketBuffer[7]);
+  SPI.setBitOrder(LSBFIRST);
   
  //Send Status OK Response
   statusResponse(commandPacketBuffer, responsePacketBuffer, 0x00);    
@@ -2405,15 +2408,15 @@ void loadNVSConfig()
     Serial1.println("Loading User Device Configuration...");
   #endif  
   
-  userID = (EEPROM.read(NVS_USERID) << 8) | EEPROM.read(NVS_USERID+1);
+  userID = (dueFlashStorage.read(NVS_USERID) << 8) | dueFlashStorage.read(NVS_USERID+1);
   
-  ethernetIP = (EEPROM.read(NVS_ETHERNET_IP) << 24) |(EEPROM.read(NVS_ETHERNET_IP+1) << 16) |(EEPROM.read(NVS_ETHERNET_IP+2) << 8) | EEPROM.read(NVS_ETHERNET_IP+3);
-  ethernetPort = (EEPROM.read(NVS_ETHERNET_PORT) << 8) | EEPROM.read(NVS_ETHERNET_PORT+1);
+  ethernetIP = (dueFlashStorage.read(NVS_ETHERNET_IP) << 24) |(dueFlashStorage.read(NVS_ETHERNET_IP+1) << 16) |(dueFlashStorage.read(NVS_ETHERNET_IP+2) << 8) | dueFlashStorage.read(NVS_ETHERNET_IP+3);
+  ethernetPort = (dueFlashStorage.read(NVS_ETHERNET_PORT) << 8) | dueFlashStorage.read(NVS_ETHERNET_PORT+1);
 
-  wifiIP = (EEPROM.read(NVS_WIFI_IP) << 24) |(EEPROM.read(NVS_WIFI_IP+1) << 16) |(EEPROM.read(NVS_WIFI_IP+2) << 8) | EEPROM.read(NVS_WIFI_IP+3);
-  wifiPort = (EEPROM.read(NVS_WIFI_PORT) << 8) | EEPROM.read(NVS_WIFI_PORT+1);
+  wifiIP = (dueFlashStorage.read(NVS_WIFI_IP) << 24) |(dueFlashStorage.read(NVS_WIFI_IP+1) << 16) |(dueFlashStorage.read(NVS_WIFI_IP+2) << 8) | dueFlashStorage.read(NVS_WIFI_IP+3);
+  wifiPort = (dueFlashStorage.read(NVS_WIFI_PORT) << 8) | dueFlashStorage.read(NVS_WIFI_PORT+1);
     
-  wifiSSIDSize = EEPROM.read(NVS_WIFI_SSID_SIZE);
+  wifiSSIDSize = dueFlashStorage.read(NVS_WIFI_SSID_SIZE);
   if(wifiSSIDSize > 32)
   {
     wifiSSIDSize = 32;
@@ -2421,10 +2424,10 @@ void loadNVSConfig()
   
   for(int i=0; i<wifiSSIDSize; i++)
   {
-    wifiSSID[i] = EEPROM.read(i+NVS_WIFI_SSID);
+    wifiSSID[i] = dueFlashStorage.read(i+NVS_WIFI_SSID);
   }
-  wifiSecurity = EEPROM.read(NVS_WIFI_SECURITY_TYPE);
-  wifiPwSize = EEPROM.read(NVS_WIFI_PW_SIZE);
+  wifiSecurity = dueFlashStorage.read(NVS_WIFI_SECURITY_TYPE);
+  wifiPwSize = dueFlashStorage.read(NVS_WIFI_PW_SIZE);
   
   if(wifiPwSize > 64)
   {
@@ -2432,10 +2435,10 @@ void loadNVSConfig()
   }
   for(int i=0; i<wifiPwSize; i++)
   {
-    wifiPw[i] = EEPROM.read(i+NVS_WIFI_PW);    
+    wifiPw[i] = dueFlashStorage.read(i+NVS_WIFI_PW);    
   }
   
-  //serialInterfaceMaxBaud = ((unsigned long)(((unsigned long)EEPROM.read(NVS_SERIAL_INTERFACE_MAX_BAUD)<<24) | ((unsigned long)EEPROM.read(NVS_SERIAL_INTERFACE_MAX_BAUD+1)<<16) | ((unsigned long)EEPROM.read(NVS_SERIAL_INTERFACE_MAX_BAUD+2)<<8) | ((unsigned long)EEPROM.read(NVS_SERIAL_INTERFACE_MAX_BAUD+3))));
+  //serialInterfaceMaxBaud = ((unsigned long)(((unsigned long)dueFlashStorage.read(NVS_SERIAL_INTERFACE_MAX_BAUD)<<24) | ((unsigned long)dueFlashStorage.read(NVS_SERIAL_INTERFACE_MAX_BAUD+1)<<16) | ((unsigned long)dueFlashStorage.read(NVS_SERIAL_INTERFACE_MAX_BAUD+2)<<8) | ((unsigned long)dueFlashStorage.read(NVS_SERIAL_INTERFACE_MAX_BAUD+3))));
   //if(serialInterfaceMaxBaud < 200 | serialInterfaceMaxBaud > 200000)
   //{
   // serialInterfaceMaxBaud = 9600;

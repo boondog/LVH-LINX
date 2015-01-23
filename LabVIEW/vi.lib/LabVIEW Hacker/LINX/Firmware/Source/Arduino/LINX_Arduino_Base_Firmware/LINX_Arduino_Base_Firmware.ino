@@ -1,3 +1,6 @@
+#include <flash_efc.h>
+#include <efc.h>
+#include <DueFlashStorage.h>
 /****************************************************************************************
 ** 
 **  chipKIT_uC32 - LINX Firmware for chipKIT uC32
